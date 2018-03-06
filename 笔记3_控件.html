@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>控件</title>
+	<script type="text/javascript">
+function init() {
+  var d = new Date();
+  var mapObj = new AMap.Map(mapDiv, {
+  view:new AMap.View2D({
+    center: new AMap.LngLat(116.39, 39.9),
+    zoom:15
+   })
+  });
+mapObj.plugin(["AMap.ToolBar","AMap.OverView","AMap.Scale"],function(){
+  //加载工具条
+  tool = new AMap.ToolBar({
+    direction:true,//隐藏方向导航
+    ruler:true,//隐藏视野级别控制尺
+    autoPosition:true//禁止自动定位
+  });
+  mapObj.addControl(tool);
+	//移除工具条
+	//mapObj.removeControl(tool);
+  //加载鹰眼
+  view = new AMap.OverView();
+  mapObj.addControl(view);
+  //加载比例尺
+  scale = new AMap.Scale();
+  mapObj.addControl(scale);
+
+	//--------圆实例--------------------
+	//初始化待编辑的圆实例
+	var circle = new AMap.Circle({
+		map: mapObj,
+		center:new AMap.LngLat("116.40332221984863","39.90025505675715"),
+		radius:1000
+	});
+	//加载圆编辑插件
+	mapObj.plugin(["AMap.CircleEditor"],function(){
+		//实例化时指定地图对象
+		circleEditor = new AMap.CircleEditor(mapObj,circle);
+	});
+});
+}
+function loadScript() {
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src = "http://webapi.amap.com/maps?v=1.3&key=973ff4275eaf1fb1ba1292a967ba116b&callback=init";
+  document.body.appendChild(script);
+}
+window.onload = loadScript;
+</script>
+</head>
+<body>
+<div id="mapDiv" style="width:800px; height:600px"></div>
+
+</body>
+</html>

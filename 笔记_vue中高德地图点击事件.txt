@@ -1,0 +1,22 @@
+eventHandler:function(e){
+	var lnglat = e.lnglat;
+	let map = thisa.$refs.gaodemap.map;
+	if(thisa.marker==null){
+		thisa.marker = new AMap.Marker({                 
+			  map:map,                 
+			  position:lnglat, 
+			  icon:"http://webapi.amap.com/images/0.png",
+		   })
+		   thisa.marker.setLabel({  
+		offset: new AMap.Pixel(-18, -21),  
+		content: "活动位置"  
+	   });  
+		   // thisa.marker.setMap(map);
+		}else{
+			thisa.marker.setPosition(lnglat);
+		}
+	
+},
+mapLoad:function(map){
+	var listener = AMap.event.addListener(map,"click",thisa.eventHandler);
+}

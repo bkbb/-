@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+<script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56"></script>
+<script>
+  var meng=null;
+  window.onload=function(){
+	var area = document.getElementById('area');
+	var startX=0;
+	var startY=0;
+	//1.在窗体上响应事件
+	//2.鼠标按下的时候
+	document.onmousedown=function(e){
+		//alert(e.x+':'+e.y);
+		startX=e.x;
+		startY=e.y;
+		area.style.left = startX+'px';
+		area.style.top = startY+'px';
+		
+		//3.鼠标拖拽的时候,div的宽高发生变化
+		document.onmousemove=function(e){
+			dx = e.x-startX;
+			dy = e.y-startY;
+			area.style.width=dx+'px';
+			area.style.height=dy+'px';
+		}
+		//4.鼠标抬起的时候
+		document.onmouseup=function(e){
+			document.onmousemove=null;
+		}
+	}
+	
+	
+  }
+  </script>
+<style>
+	#area{
+		position:absolute;
+		border:1px solid blue;
+	}
+	#meng{
+		position:absolute;
+		border:1px solid red;
+	}
+  </style>
+ </head>
+ <body>
+  <div id="mapContainer" style='width:800px;height:600px'>
+  </div>
+  <div id='meng' style='left:0px;top:0px;display:none'></div>
+  <div id='area' style='left:260px;top:260px;width:800px;height:600px;'></div>
+<script>
+	//初始化地图对象，加载地图
+var map = new AMap.Map('mapContainer', {
+	view: new AMap.View2D({
+		center: new AMap.LngLat(116.3891, 39.909847),
+		zoom: 18
+	})
+});
+ map.on('complete', function() {
+	 var mapContainer = document.getElementById('mapContainer');
+     meng = document.getElementById('meng');
+	 meng.style.left=mapContainer.style.left;
+	 meng.style.top=mapContainer.style.top;
+	 meng.style.width=mapContainer.style.width;
+	 meng.style.height=mapContainer.style.height;
+	 //meng.style.display='none';
+    });
+
+ 
+
+AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+    function(){
+        map.addControl(new AMap.ToolBar());
+
+        map.addControl(new AMap.Scale());
+
+        map.addControl(new AMap.OverView({isOpen:true}));
+});
+
+function eventHandler(e){
+		//alert(e.lnglat);
+		//meng.style.display='block';
+		map.map.dragEnable=false; //停不住
+		/*
+		document.write(map.map.dragEnableChanged);
+		for(var key in map.map){
+			document.write(key);
+			document.write('<br/>');
+		}
+		*/
+	
+		
+		meng.onmousemove=function(evt){
+			//alert('移动'+evt.x);
+		}
+	
+}
+var listener = AMap.event.addListener(map,"mousedown",eventHandler);
+
+
+</script>
+ </body>
+</html>
